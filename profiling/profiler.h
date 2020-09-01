@@ -260,7 +260,7 @@ class ProfileTreeView {
 inline void WaitOneProfilerTick() {
   static const int millisecond = 1000000;
 
-#if defined __arm__ || defined __aarch64__
+#if defined __arm__ || defined __aarch64__ || defined __gptx__
   // Reduced sampling frequency on mobile devices helps limit time and memory
   // overhead there.
   static const int interval = 10 * millisecond;

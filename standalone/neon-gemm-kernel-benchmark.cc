@@ -66,12 +66,13 @@
 #include <random>
 #include <type_traits>
 
-#if !defined(__arm__) && !defined(__aarch64__) && \
+#if !defined(__arm__) && !defined(__aarch64__) && !defined(__gptx__) && \
   !(defined(__mips) && (__mips_isa_rev >= 5) && defined(__mips_msa))
 #error This benchmark assumes ARM or MIPS (for intrinsics and inline assembly sections).
 #endif
 
-#if defined(__arm__) || defined(__aarch64__)
+#if defined(__arm__) || defined(__aarch64__) || defined(__gptx__)
+
 #include <arm_neon.h>
 #endif
 
@@ -1777,7 +1778,7 @@ struct NEON_32bit_GEMM_Float32_FMA_Rotating {
 
 #endif  // __arm__
 
-#ifdef __aarch64__
+#if defined(__aarch64__) || defined(__gptx__)
 
 // This is the current standard kernel in gemmlowp, see:
 // https://github.com/google/gemmlowp/blob/b1e2a29ff866680028f3080efc244e10e8dd7f46/internal/kernel_neon.h#L646
@@ -4536,8 +4537,9 @@ struct NEON_64bit_GEMM_Float32_WithScalar_A55r1 {
 
 #endif  // __aarch64__
 
-#if defined(__arm__) || defined(__aarch64__)
-#ifndef __aarch64__
+#if defined(__arm__) || defined(__aarch64__) || defined(__gptx__)
+
+#ifndef __aarch64__ || __gptx__
 inline int32x4_t vpaddq_s32(int32x4_t a, int32x4_t b) {
   const int32x2_t c = vpadd_s32(vget_low_s32(a), vget_high_s32(a));
   const int32x2_t d = vpadd_s32(vget_low_s32(b), vget_high_s32(b));
@@ -6401,7 +6403,7 @@ int main() {
 #endif
 #endif
 
-#ifdef __aarch64__
+#if defined(__aarch64__) || defined(__gptx__)
   BENCHMARK(NEON_64bit_GEMM_Int425Operands);
   BENCHMARK(NEON_64bit_GEMM_Int425Operands_intrinsics);
   BENCHMARK(NEON_64bit_GEMM_Int7Operands_AccumEightWithin16Bits);

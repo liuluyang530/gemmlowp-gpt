@@ -37,7 +37,7 @@
 #define GEMMLOWP_ARM_32
 #endif
 
-#ifdef __aarch64__
+#if defined(__aarch64__) || defined(__gptx__)
 #define GEMMLOWP_ARM_64
 #endif
 
