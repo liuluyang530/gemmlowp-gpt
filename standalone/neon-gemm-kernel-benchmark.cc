@@ -4539,7 +4539,7 @@ struct NEON_64bit_GEMM_Float32_WithScalar_A55r1 {
 
 #if defined(__arm__) || defined(__aarch64__) || defined(__gptx__)
 
-#ifndef __aarch64__ || __gptx__
+#if !defined(__aarch64__) || !defined(__gptx__)
 inline int32x4_t vpaddq_s32(int32x4_t a, int32x4_t b) {
   const int32x2_t c = vpadd_s32(vget_low_s32(a), vget_high_s32(a));
   const int32x2_t d = vpadd_s32(vget_low_s32(b), vget_high_s32(b));
